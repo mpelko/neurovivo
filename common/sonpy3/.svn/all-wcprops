@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/NeurOnline/!svn/ver/261/src/NOL_v0.2.9/pythonfiles/datafileplayer/sonpy
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/NeurOnline/!svn/ver/207/src/NOL_v0.2.9/pythonfiles/datafileplayer/sonpy/__init__.py
+END
+son.py
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/NeurOnline/!svn/ver/266/src/NOL_v0.2.9/pythonfiles/datafileplayer/sonpy/son.py
+END
+_marker.py
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/NeurOnline/!svn/ver/266/src/NOL_v0.2.9/pythonfiles/datafileplayer/sonpy/_marker.py
+END
+_waveform.py
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/NeurOnline/!svn/ver/262/src/NOL_v0.2.9/pythonfiles/datafileplayer/sonpy/_waveform.py
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/NeurOnline/!svn/ver/207/src/NOL_v0.2.9/pythonfiles/datafileplayer/sonpy/README
+END

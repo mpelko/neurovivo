@@ -1,0 +1,9 @@
+{
+v_init = -60
+runStopAt = 700
+runStopIn = 600
+//t = 789.9
+tstop = 150
+dt = 0.1
+steps_per_ms = 10
+}

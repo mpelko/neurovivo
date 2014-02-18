@@ -1,0 +1,27 @@
+
+Building a network in Neuron:
+http://www.neuron.yale.edu/neuron/static/docs/netbuild/intro.html
+
+FAQ on playing synaptic events:
+http://www.neuron.yale.edu/neuron/faq#playevents
+
+NetCon source:
+http://www.neuron.yale.edu/neuron/static/docs/help/neuron/neuron/classes/netcon.html#NetCon
+
+About vecevent.mod, .ses, .hoc VecStim():
+https://www.neuron.yale.edu/phpBB/viewtopic.php?f=15&t=1778&start=0
+
+
+NEURON SPIKE SOURCES
+
+From: http://www.neuron.yale.edu/phpBB/viewtopic.php?f=18&t=1882
+In NEURON-implemented network models that use spike-triggered synaptic communication, presynaptic cells ("spike sources") are connected to postsynaptic targets by NetCons. Spike sources fall into three broad categories.
+
+1. Biophysical model cells. These are mechanistic models of biological neurons, which are represented by sections which have membrane currents, and membrane potential which is computed by numerical integration of the cable equation. To use a biophysical model cell as a spike source, one must attach a NetCon to it and, at a minimum, tell that NetCon the name of the variable that it is to monitor for threshold crossing.
+
+2. ARTIFICIAL_CELLs. An ARTIFICIAL_CELL has two chief distinguishing features. First, it is not associated with a section location or numerical integrator; this means that it doesn't have a BREAKPOINT block, refer to v or any ions, or have a POINTER. Second, the only way it can affect, or be affected by, anything outside itself is by sending or receiving events; this means it has a NET_RECEIVE block. For an ARTIFICIAL_CELL to serve as a spike source, its NET_RECEIVE block must contain a net_event() statement. Execution of a net_event() statement will cause events to be delivered, with appropriate latencies and weights, to all targets of the NetCons for which the ARTIFICIAL_CELL is a spike source. Since the spike event is generated directly by calling net_event(), the NetCons don't have to monitor a variable in the ARTIFICIAL_CELL for threshold crossing.
+
+3. POINT_PROCESSes. A POINT_PROCESS may refer to v or ions, have a POINTER coupled to some external variable, or have one or more state variables that require numerical integration--any of which is enough to require it to have a BREAKPOINT block. A POINT_PROCESS may also have a NET_RECEIVE block that allows it to use events to communicate with ARTIFICIAL_CELLs or POINT_PROCESSes. That's what is going on with instances of the IZH class (examine izh.mod and you'll see that its NET_RECEIVE block contains a net_event() statement that is executed when vv crosses a threshold). Since an IZH cell generates spike events by calling net_event(), NetCons that use an IZH cell as their spike source do not have to be told to monitor a variable in the IZH mechanism for threshold crossing.
+
+
+

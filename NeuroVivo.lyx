@@ -1,0 +1,2598 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks true
+\pdf_pdfborder false
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Towards the NeuroVivo
+\end_layout
+
+\begin_layout Author
+Miha Pelko
+\end_layout
+
+\begin_layout Standard
+NeuroVivo should become a flexible platform for simulating neurons in their
+ realistic environment using the Neuron simulator.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+Development
+\end_layout
+
+\begin_layout Standard
+17.3.2011: Starting to compose log offline.
+ The previous logging was done online on my progress log:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.miha.bajta.org/progress-log/questions/reproducing-destexhe-findings/
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.miha.bajta.org/progress-log/topics/correlated-input/
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Inputs to the model
+\end_layout
+
+\begin_layout Standard
+To create a realistic environment to the neuron, we have to introduce the
+ synaptic inputs it receives.
+ This inputs are correlated.
+ First and obvious reason is the fact that the same neuron usually receives
+ ~5 inputs from the same presynaptic neuron.
+ So those are obviously correlated.
+ Furthermore, there are the network effects, which introduce further correlation
+, delicate interplay between the inhibitory and excitatory inputs, ...
+\end_layout
+
+\begin_layout Standard
+The aim of NeuroVivo is to make the inputs pluggable.
+ The 
+\begin_inset Quotes eld
+\end_inset
+
+user
+\begin_inset Quotes erd
+\end_inset
+
+ should be able to specify some parameters, such as:
+\end_layout
+
+\begin_layout Itemize
+Total input size (should be relative, to incorporate the neuron excitability
+ not sure relative to what yet)
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+number of inputs
+\end_layout
+
+\begin_layout Itemize
+synaptic weights
+\end_layout
+
+\begin_layout Itemize
+weigths distribution
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Excitatory / Inhibitory ratio
+\end_layout
+
+\begin_layout Itemize
+Correlation parameters (Inhibitory, Excitatory, Inhibitory <--> Excitatory)
+\end_layout
+
+\begin_layout Itemize
+Analysing the output:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+does the spontaneus input produces spikes
+\end_layout
+
+\begin_layout Itemize
+what is the output voltage variance?
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+Correlations - different models 
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Correlations---models"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename correlations/figures/destexhe_presentation.png
+	lyxscale 30
+	width 6cm
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename correlations/figures/spikes_shift_scatter.png
+	lyxscale 20
+	width 6cm
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+LEFT: Creating the correlated input using Destexhe method (H
+\backslash
+hat{o}, Destexhe, 1998): (top) spike trains for the 3 uncorrelated spike
+ trains (seed traces).
+ (bottom) 50 spike trains generated from those 3 seed traces.
+ RIGHT: Demonstration of perturbing and shifting the spike trains: (top)
+ 50 identical spike trains.
+ (middle & bottom) Spikes from the top are perturbed and shifted for different
+ perturbation and shift values.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename correlations/figures/correlation_perturbed_wide_destexhe.png
+	lyxscale 30
+	width 10cm
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Cross-correlation plots of the two spike trains from the same set, showing
+ the effects of perturbation and shifting.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Most of the time when talking about correlations in the input trains we
+ talk about the pairwise correlations among the inputs.
+ Those are often measured in a form of a Pearson correlation coefficient
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+r_{P}(x_{1},x_{2})=\frac{\langle(x_{1}-\langle x_{1}\rangle)(x_{2}-\langle x_{2}\rangle\rangle}{\sigma_{x_{1}}\sigma_{x_{2}}},
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ is a discretised spike train - a vector of zeros and ones.
+ The occurence of 
+\begin_inset Formula $1$
+\end_inset
+
+ at the 
+\begin_inset Formula $i-$
+\end_inset
+
+th position denotes a spike occuring in the time between the 
+\begin_inset Formula $i\cdot dt$
+\end_inset
+
+ and 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $(i+1)\cdot dt$
+\end_inset
+
+, where 
+\begin_inset Formula $dt$
+\end_inset
+
+ is the width of the time bin.
+\end_layout
+
+\begin_layout Standard
+To also analyse the correlations occuring among more then the pairs of neurons
+ we define the higher order covariances or higher order joint moments (HOJM).
+ order 
+\begin_inset Formula $k$
+\end_inset
+
+ as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+cov(x_{1},x_{2},\ldots,x_{k})=\mbox{\langle}(x_{1}-\langle x_{1}\rangle)(x_{2}-\langle x_{2}\rangle)\cdots(x_{k}-\langle x_{k}\rangle)\rangle
+\end{equation}
+
+\end_inset
+
+
+\begin_inset Formula $\langle x\rangle$
+\end_inset
+
+ represents the average of a spike train 
+\begin_inset Formula $x$
+\end_inset
+
+ (
+\begin_inset Formula $E[x]$
+\end_inset
+
+).
+ We use the notation 
+\begin_inset Formula $cov({X_{k}})$
+\end_inset
+
+ for the 
+\begin_inset Formula $k$
+\end_inset
+
+-th order joint momentum as the extension of the definition of covariance
+ (
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $cov(X,Y)=E\left[(X-\bar{X})(Y-\bar{Y})\right]$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+) to higher dimensions.
+ Notice how this differs from the Pearson correlation coefficient.
+ We take away the normalization term in the definition of the HOJM.
+\end_layout
+
+\begin_layout Standard
+In the case of homogenous neuronal population it holds that
+\begin_inset Formula $\langle x_{i}\rangle=\langle x\rangle$
+\end_inset
+
+ for 
+\begin_inset Formula $i=1,2,\ldots,N.$
+\end_inset
+
+ We can then write
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+cov(x_{1},x_{2},\ldots,x_{k})=\sum_{m=0}^{k}\Bigl[(-1)^{m}{N \choose m}\mbox{\langle}x_{1}x_{2}\cdots x_{k-m}\rangle\langle x\rangle^{m}\Bigr]\label{eq:cov_homogen}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Destexhe correlation model
+\end_layout
+
+\begin_layout Standard
+The model creates 
+\begin_inset Formula $N$
+\end_inset
+
+ spike trains out of 
+\begin_inset Formula $N_{2}$
+\end_inset
+
+ possion spike trains, by assigning a spike/no-sipke value in 
+\begin_inset Formula $i$
+\end_inset
+
+-th time bil of the each of the 
+\begin_inset Formula $N$
+\end_inset
+
+ spike train, taken from the 
+\begin_inset Formula $i$
+\end_inset
+
+-th time bin of a random 
+\begin_inset Formula $N_{2}$
+\end_inset
+
+train(
+\begin_inset Formula $(1,0)$
+\end_inset
+
+ notation).
+\end_layout
+
+\begin_layout Standard
+The pairwise correlation (Pearson correlation coefficient) in this case
+ is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+r_{P}(x_{1},x_{2})=\frac{1}{N_{2}}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This model also introduces higher order joined moments (HOJM).
+ If we define 
+\begin_inset Formula $p$
+\end_inset
+
+ as the probability of spike being elicited in the time bin 
+\begin_inset Formula $i$
+\end_inset
+
+, then we can define and calculate the 3rd and the 4th HOJM:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+cov(x_{1},x_{2},x_{3})=\mbox{\langle}(x_{1}-\langle x_{1}\rangle)(x_{2}-\langle x_{2}\rangle)(x_{3}-\langle x_{3}\rangle)\rangle=\frac{p(2p\text{²}-3p+1)}{N_{2}\text{²}}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+cov(x_{1},x_{2},x_{3},x_{4})=\frac{p(1-p)(1+3p(N_{2}-2)-3p\text{²}(N_{2}-2))}{N_{2}\text{³}}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It is quite straightforward to show 
+\begin_inset Formula $cov(x_{1},x_{2},...,x_{k})\sim p(\frac{1}{N_{2}})^{k}$
+\end_inset
+
+ for small 
+\begin_inset Formula $p$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+The exact calculation of the 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $cov(x_{1},x_{2},...,x_{k})$
+\end_inset
+
+ as a function of 
+\begin_inset Formula $N_{2}$
+\end_inset
+
+ and 
+\begin_inset Formula $p$
+\end_inset
+
+ is a bit more involved.
+ Since the neurons are homogenous in respect to the mean firing rate, we
+ can take advantage of the expression 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:cov_homogen"
+
+\end_inset
+
+.
+ We are left with expressing 
+\begin_inset Formula $\mbox{\langle}x_{1}x_{2}\cdots x_{k}\rangle$
+\end_inset
+
+.
+ I think this is quite possible and I think I am close to doing it, but
+ I have a problem of finding the proper mathematical notation.
+ I will give it a try anyway:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\mbox{\langle}x_{1}x_{2}\cdots x_{k}\rangle=p\Bigl(\frac{1}{N_{2}}\Bigr){}^{k}\Bigl[1+\sum_{i=1}^{k-1}\bigl(p^{i}f(k-1,i)\prod_{j=1}^{i}(N_{2}-j)\bigr)\Bigr],
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $f(a,b)$
+\end_inset
+
+ is a specially constructed function.
+ The function is defined for 
+\begin_inset Formula $a,b\in\mathbb{N}$
+\end_inset
+
+, 
+\begin_inset Formula $b\leq a$
+\end_inset
+
+.
+ Generally
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+f(a,b)=\sum_{\begin{smallmatrix}x_{1},x_{2},...,x_{b}=1;\\
+x_{1}\leq x_{2}\leq...\leq x_{b}
+\end{smallmatrix}}^{x_{1},x_{2},...,x_{b}=a-b+1}\biggl[\prod_{j=1}^{b}x_{j}\biggr]
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For some cases it is easy to specify the function values.
+ 
+\begin_inset Formula $f(a,b)=1$
+\end_inset
+
+ if 
+\begin_inset Formula $a=b$
+\end_inset
+
+.
+ Furthermore, 
+\begin_inset Formula $f(a,b)=\sum_{i}^{a}i$
+\end_inset
+
+ if 
+\begin_inset Formula $b=1$
+\end_inset
+
+ and 
+\begin_inset Formula $f(a,b)=\sum_{i=0}^{a-1}2^{i}$
+\end_inset
+
+ for 
+\begin_inset Formula $b=a-1$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Simplified max-ent correlation model (Ising model)
+\end_layout
+
+\begin_layout Standard
+We write down the max-ent correlation model in the Ising form as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+P(\{\sigma_{i}\})=\frac{1}{Z(\{h_{i,}J_{ij}\})}exp\left[\sum_{i}h_{i}\sigma_{i}+\frac{1}{2}\sum_{i,j}J_{ij}\sigma_{i}\sigma_{j}\right]
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\{\sigma_{i}\};$
+\end_inset
+
+ 
+\begin_inset Formula $(i=1,...,N)$
+\end_inset
+
+ is a spike train pattern at the specific time bin, with
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+ 
+\begin_inset Formula $\sigma_{i}=1$
+\end_inset
+
+ if the 
+\begin_inset Formula $i$
+\end_inset
+
+-th neuron spiked at that time bin, and 
+\begin_inset Formula $\sigma_{i}=1$
+\end_inset
+
+ if it did not 
+\begin_inset Formula $(1,-1)$
+\end_inset
+
+ notation.
+\end_layout
+
+\begin_layout Standard
+As we are looking for uniformly distributed corrleations, we can simplify
+ this model and take 
+\begin_inset Formula $h_{i}=h$
+\end_inset
+
+ and 
+\begin_inset Formula $J_{ij}=J$
+\end_inset
+
+ for 
+\begin_inset Formula $i\neq j$
+\end_inset
+
+ and 
+\begin_inset Formula $J_{ij}=0$
+\end_inset
+
+ for 
+\begin_inset Formula $i=j$
+\end_inset
+
+.
+ If we now define 
+\begin_inset Formula $P$
+\end_inset
+
+ as the number of spikes in the pattern and 
+\begin_inset Formula $\{\sigma_{i}\}_{P}$
+\end_inset
+
+ a patteren with P spikes, we can write down:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+Pr(P)\equiv P(\{\sigma_{i}\}_{P})=\frac{1}{Z(\{h,J\})}exp\left(h(2P-N)+J\left[\frac{N(N-1)}{2}-2P(N-P)\right]\right)\label{eq:marginal_prob}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now we return back to the spike 
+\begin_inset Formula $(1,0)$
+\end_inset
+
+ notation.
+ Based on 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:marginal_prob"
+
+\end_inset
+
+ we can explicitly calculate the average and correlations: 
+\begin_inset Formula 
+\begin{equation}
+<\sigma_{i}>=p=\sum_{P=0}^{N}\frac{P}{N}Pr(P)
+\end{equation}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{equation}
+cov(x,y)=\sum_{P=0}^{N}\frac{P(P-1)}{N(N-1)}Pr(P)-p\text{²}
+\end{equation}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{equation}
+cov(x,y,z)=\left(\sum_{P=0}^{N}\frac{P(P-1)(P-2)}{N(N-1)(N-2)}Pr(P)-3cov(x,y)p+2p\text{³}\right)
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Based on this we plot (Figure: 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:average_corr2_isi"
+
+\end_inset
+
+) the dependence of the average and the 2nd order correlation on parameters
+ h and J (N = 60):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename correlations/figures/ising_corr2.png
+	lyxscale 70
+	width 11cm
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Average (
+\begin_inset Formula $p$
+\end_inset
+
+) and second order correlation (Pearson correlation coefficient) dependence
+ on the parameters 
+\begin_inset Formula $(h,J)$
+\end_inset
+
+ in the simple Ising model.
+ in the figure 
+\begin_inset Formula $N=60$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:average_corr2_isi"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Given a desired average and the 2nd order correlation, we can quite easily
+ estimate the needed parameters 
+\begin_inset Formula $(h,J)$
+\end_inset
+
+ using simple simplex optimisation procedure (
+\series bold
+correction:
+\series default
+ the optimization procedure significantly fails for bigger values of the
+ 2nd order of correlation 
+\begin_inset Formula $>0.2$
+\end_inset
+
+ when N is around 100).
+ This allows us to create the desired spike trains using the following receipt:
+\end_layout
+
+\begin_layout Standard
+First we find the needed parameters 
+\begin_inset Formula $(h,J)$
+\end_inset
+
+ given the desired average and the 2nd order correlation, we randomly select
+ the number of spikes in a population per each time-bin based on the probability
+ distribution given in 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:marginal_prob"
+
+\end_inset
+
+.
+ For each time-bin we now randomly assign these spike trains among the populatio
+n.
+ 
+\end_layout
+
+\begin_layout Standard
+Looking at the higher order correlations, we can see for the 3rd order how
+ they are not present in the Ising model (as opposed to the Destexhe model)
+ on Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:2nd_vs_3rd_theor"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename correlations/figures/higher_order_ising_vs_destexhe.png
+	lyxscale 50
+	width 12cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+N=30; Numerical and theoretical calculations of the 2nd vs.
+ 3rd order covariance in Destexhe and simple Ising correlation models.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:2nd_vs_3rd_theor"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Staude model
+\end_layout
+
+\begin_layout Standard
+TODO - write up the model
+\end_layout
+
+\begin_layout Subsubsection
+MIP model
+\end_layout
+
+\begin_layout Standard
+TODO - write up the model
+\end_layout
+
+\begin_layout Subsection
+Higher order correlations and different model comparisons
+\end_layout
+
+\begin_layout Standard
+For the poster in Edinburgh neuroscience meeting I prepared a study on how
+ higher order correlations can have significantly different effects.
+ To replicate those, check the NeuroVivo repository (11ca314ca3ee).
+ Here I present the poster and after-poster work.
+\end_layout
+
+\begin_layout Standard
+I use different models for generating correlated input (so far Destexhe,
+ Ising, Staude, MIP) described above 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Correlations---models"
+
+\end_inset
+
+ and compare them in respect to higher order correlations and their influence
+ on the single neuron output.
+\end_layout
+
+\begin_layout Subsubsection
+Calculations
+\end_layout
+
+\begin_layout Standard
+Looking at the maths more precisely, we are in fact using the notion of
+ covariance rather then corrlelation.
+ We define the covariance of order 
+\begin_inset Formula $k$
+\end_inset
+
+ as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+cov(x_{1},x_{2},\ldots,x_{k})=\mbox{\langle}(x_{1}-\langle x_{1}\rangle)(x_{2}-\langle x_{2}\rangle)\ldots(x_{k}-\langle x_{k}\rangle)\rangle
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We used the notification 
+\begin_inset Formula $\langle x\rangle=E[x]$
+\end_inset
+
+.
+ In our case of homogenous neuronal population it holds that
+\begin_inset Formula $\langle x_{i}\rangle=\langle x\rangle$
+\end_inset
+
+ for 
+\begin_inset Formula $i=1,2,\ldots,N.$
+\end_inset
+
+ We can then write
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+cov(x_{1},x_{2},\ldots,x_{k})=\sum_{m=0}^{k}\Bigl[(-1)^{m}{N \choose m}\mbox{\langle}x_{1}x_{2}\cdots x_{k-m}\rangle\langle x\rangle^{m}\Bigr]\label{eq:cov_from_P_prob}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\mbox{\langle}x_{1},x_{2},\ldots,x_{k}\rangle=\sum_{P=k}^{N}Pr(P)\frac{P(P-1)\ldots(P-k+1)}{N(N-1)\ldots(N-k+1)},
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $Pr(P)$
+\end_inset
+
+ stands for probability that 
+\begin_inset Formula $P$
+\end_inset
+
+ spikes are present in the whole population at a specific time-bin (spike-count
+ probability).
+ Since we assume Poisson spike trains, this probability distribution is
+ the same for any time bin.
+ For a homogenous population of 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $N$
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\noun default
+\color inherit
+ neurons with a specified mean rate
+\begin_inset Formula $\langle x\rangle$
+\end_inset
+
+ and a spike count probability distribution 
+\begin_inset Formula $Pr(P)$
+\end_inset
+
+, we can always compute any 
+\begin_inset Formula $k$
+\end_inset
+
+-th order covariance.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename correlations/examples/figures/cov_calc_vs_est.pdf
+	lyxscale 30
+	width 12cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Estimated and calculated higher order covariances (joint central moments)
+ for some of the models of correlated inputs.
+ We first generate the trains (N = 100, time = 10 s).
+ Then we either estimate the higher (
+\begin_inset Formula $k$
+\end_inset
+
+) order covariances (joint central moments) by taking 100 random combinations
+ of 
+\begin_inset Formula $k$
+\end_inset
+
+ trains and compute 
+\begin_inset Formula $cov(x_{1},x_{2},\ldots,x_{k})$
+\end_inset
+
+ directly or we take the 
+\begin_inset Formula $Pr(P)$
+\end_inset
+
+ distribution of the generated trains and calculate the 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $cov(x_{1},x_{2},\ldots,x_{k})$
+\end_inset
+
+ according to equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:cov_homogen"
+
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Estimated-and-calculated_cov"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Estimated-and-calculated_cov"
+
+\end_inset
+
+ shows the estimated and calculated higher order covariances (joint central
+ moments) for some of the models of correlated inputs.
+ We first generate the trains (N = 100, time = 10 s).
+ Then we either estimate the higher (
+\begin_inset Formula $k$
+\end_inset
+
+) order covariances (joint central moments) by taking 100 random combinations
+ of 
+\begin_inset Formula $k$
+\end_inset
+
+ trains and compute 
+\begin_inset Formula $cov(x_{1},x_{2},\ldots,x_{k})$
+\end_inset
+
+ directly or we take the 
+\begin_inset Formula $Pr(P)$
+\end_inset
+
+ distribution of the generated trains and calculate the 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\noun off
+\color none
+
+\begin_inset Formula $cov(x_{1},x_{2},\ldots,x_{k})$
+\end_inset
+
+ according to Equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:cov_homogen"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Pr(P) and higher order covariances in different models
+\end_layout
+
+\begin_layout Standard
+In the previous subsection we show how to calculate higher order joined
+ moments from the probability distribution 
+\begin_inset Formula $Pr(P)$
+\end_inset
+
+ (probability of 
+\begin_inset Formula $P$
+\end_inset
+
+ spikes occuring in the population at a specific time bin) assuming Poisson
+ spike trains.
+ 
+\end_layout
+
+\begin_layout Standard
+In Destexhe, simple Ising and MIP models specifying the mean and second
+ order covariance fully constrains the other higher joined moments in the
+ homogenous population of 
+\begin_inset Formula $N$
+\end_inset
+
+ neurons (and also constrain 
+\begin_inset Formula $Pr(P)$
+\end_inset
+
+).
+ In Staude model this is not the case, as the mean and second order covariance
+ only partially constrain 
+\begin_inset Formula $Pr(P)$
+\end_inset
+
+.
+ In Figure we therefore take advantage of Staude model to explore different
+ higher order joint momentum profiles for specific cases of 
+\begin_inset Formula $Pr(P)$
+\end_inset
+
+ distributions.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename correlations/examples/figures/P_prob_to_cov_Staude.pdf
+	lyxscale 30
+	width 12cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Exploring how 
+\begin_inset Formula $Pr(P)$
+\end_inset
+
+ distribution translate to higher order joined moments using the Stude method
+ for spike train geration of N=10 neurons with mean firing rate of 10Hz.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To investigate the influence of higher order joined momentum of the input
+ trace on the output of a single neuron, we constructed populations of 
+\begin_inset Formula $N=100$
+\end_inset
+
+ neurons with the mean frequency of 
+\begin_inset Formula $10Hz$
+\end_inset
+
+ and interneuron covariance 
+\begin_inset Formula $cov(x_{i},x_{j})$
+\end_inset
+
+ of 
+\begin_inset Formula $0.001$
+\end_inset
+
+ using different methods.
+ Each of those have their own 
+\begin_inset Formula $Pr(P)$
+\end_inset
+
+ distributions and corresponding higher order joined moments, as can be
+ seen in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:corr_methods_stats"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename correlations/examples/figures/P_prob_models.pdf
+	lyxscale 30
+	width 12cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename correlations/examples/figures/input_corrs.pdf
+	lyxscale 50
+	width 12cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Different methods for producing correlated inputs result in different structures
+ of higher order joint moments.
+ (Top) 
+\begin_inset Formula $Pr(P)$
+\end_inset
+
+ distributions for 4 methods of generating spike-trains in population of
+ N=100 neurons for 
+\begin_inset Formula $time=10s$
+\end_inset
+
+, mean firing frequency 
+\begin_inset Formula $10Hz$
+\end_inset
+
+ and second order joint moment of 
+\begin_inset Formula $0.001$
+\end_inset
+
+.
+ (Bottom) The corresponding higher order joined moments.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:corr_methods_stats"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+The effect of higher order correlations to the neuronal output
+\end_layout
+
+\begin_layout Standard
+Using the generated input sequences described in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:corr_methods_stats"
+
+\end_inset
+
+ we can now investigate the effects of those correated inputs on the outputs
+ of the target single neuron.
+ Using NEURON simulator with uniform weights for the input and and the conductan
+ce-based 
+\begin_inset CommandInset href
+LatexCommand href
+name "simple exponential synapses"
+target "http://www.neuron.yale.edu/neuron/static/docs/help/neuron/neuron/mech.html#ExpSyn"
+
+\end_inset
+
+ we obtain very different output frequencies for the inputs with different
+ higher order joint moments but the same mean and second order joint moment,
+ as is shown on Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:corr_simple_comparison"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename correlations/examples/figures/method_comparison.pdf
+	lyxscale 40
+	width 13cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Higher order joint moment structure strongly modulates the output frequencies
+ even when the mean frequency and second order joint moments are fixed.
+ All the methods produce the correlated input spike trains (
+\begin_inset Formula $N=100$
+\end_inset
+
+) with the same mean (
+\begin_inset Formula $10Hz$
+\end_inset
+
+) and second order covariance (
+\begin_inset Formula $0.001[spikes/ms]^{2}$
+\end_inset
+
+).
+ The control case of uncorrelated trains with the same mean is shown in
+ black.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:corr_simple_comparison"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Looking at the three methods for generating correlated inputs which are
+ fully constrained by the mean and second order covariance (Destexhe, simple
+ Ising and MIP), we can investigate how the different levels of the second
+ order covariance influence the output.
+ The results for 
+\begin_inset Formula $N=100$
+\end_inset
+
+ and mean frequency of 
+\begin_inset Formula $10Hz$
+\end_inset
+
+ are displayed on the Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:corr_2nd_order"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename correlations/examples/figures/varying_corr2_ising_destexhe_MIP.pdf
+	lyxscale 40
+	width 12.5cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+The modulation of the neuronal output by the second order covariance depends
+ on the higher order joint moment structures.
+ While correlated input produced by MIP and Destexhe methods strongly modulates
+ the output, this is not the case in for the simple Ising case.
+ The reason for this is that simple Ising method produces the input with
+ very different higher order joint moment structure as the Destexhe or MIP
+ method (see Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:corr_methods_stats"
+
+\end_inset
+
+).
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:corr_2nd_order"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It is clear that simple Ising method produces quite different results then
+ the other methods.
+ Specially Destexhe and MIP methods result in very similar outputs.
+ Higher order joint moments (HOJM) thus do influence the output characteristics
+ of a neuron.
+ To verify that the differences in the output were not caused by some temporal
+ effects of the inputs, we plot the inter spike interval (ISI) histograms
+ of input trains for all methods on Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:corr_ISI-histograms_methods"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename correlations/examples/figures/input_ISIs.pdf
+	lyxscale 40
+	width 12.5cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+ISI histograms of the inputs.
+ One spike train of a specific method is analyzed.
+ The means and standard deviations are displayed.
+ The ISI histograms obtained from individual methods (colored) do not differ
+ significantly from the uncorrelated Poission spike train ISI histogram
+ (black) indicating that single spike trains produced by the methods are
+ themselves Poisson spike trains.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:corr_ISI-histograms_methods"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It is, however, hard to estimate the output frequency of the neuron solely
+ by looking at the higher order joined moments.
+ Even though the simple Ising model with the biggest values of the higher
+ order joint moments produced the lowest output frequency (apart from the
+ uncorrelated case), the method with the second biggest HOJM - the Staude
+ Method - produced the highest output frequency.
+ 
+\end_layout
+
+\begin_layout Standard
+To estimate the output frequency it might be better to look directly at
+ the 
+\begin_inset Formula $Pr(P)$
+\end_inset
+
+ distributions of the input spike trains (Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:corr_methods_stats"
+
+\end_inset
+
+ (top)).
+ We try to do this in the next subsection.
+\end_layout
+
+\begin_layout Subsubsection
+Estimating the effects of higher order correlations
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Estimating-the-effects-higher-corr"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The effects of the higher order correlations shown on the Figures 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:corr_simple_comparison"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:corr_2nd_order"
+
+\end_inset
+
+ are significant.
+ Here we try to estimate the output frequencies looking directly at the
+ 
+\begin_inset Formula $Pr(P)$
+\end_inset
+
+ distributions.
+ For this we first need to determine how many simultaneous inputs (
+\begin_inset Formula $P$
+\end_inset
+
+) are required to elicit a spike in the target neuron.
+ 
+\end_layout
+
+\begin_layout Standard
+In the simple estimation version (est.
+ #1) we simply sum up all the occurrences of the population patterns with
+ P or more presynaptic spikes.
+ Here we do not take into account the refractory period of the neuron.
+ Consequently we overestimate the output frequency.
+ If we discard the occurrences of 
+\begin_inset Formula $P$
+\end_inset
+
+ spikes or more in the interval 
+\begin_inset Formula $t_{r}=12ms$
+\end_inset
+
+ after the last estimated spike (est.
+ #2), we obtain more realistic estimations (Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Estimating-the-output"
+
+\end_inset
+
+).
+ Here sometimes the estimation is too low as we are ignoring temporal summations.
+\end_layout
+
+\begin_layout Standard
+I think this sort of estimation is ok as long as we are in a regime of relativel
+y low inputs.
+ I suspect the method would miss much more spikes in a case of more inputs
+ or higher means of those inputs.
+ To be checked.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename correlations/examples/figures/method_comparison_estimation.pdf
+	lyxscale 50
+	width 12cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Estimating the output frequency of the target neuron from the 
+\begin_inset Formula $Pr(P)$
+\end_inset
+
+ distribution.
+ The simulation results are same as in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:corr_simple_comparison"
+
+\end_inset
+
+.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Estimating-the-output"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Investigating the influence of temporal jitter
+\end_layout
+
+\begin_layout Standard
+So far we treated the inputs in simulations as ultimately synchronized.
+ For example if we had 
+\begin_inset Formula $4$
+\end_inset
+
+ active inputs in the time interval between 
+\begin_inset Formula $t$
+\end_inset
+
+ and 
+\begin_inset Formula $t+dt$
+\end_inset
+
+ (where 
+\begin_inset Formula $dt$
+\end_inset
+
+ was so far always 
+\begin_inset Formula $1ms$
+\end_inset
+
+), we would induce all the 
+\begin_inset Formula $4$
+\end_inset
+
+ inputs at the time 
+\begin_inset Formula $t$
+\end_inset
+
+ in the simulations.
+ This is of course not realistic.
+ What would have happened if we instead randomly jittered the inputs in
+ the time interval? How small does the interval have to be in order to rightfull
+y neglect the effects of time jitter.
+\end_layout
+
+\begin_layout Standard
+To test this we first take the minimum number of simultaneous inputs required
+ to elicit a spike (we presume any jittering will only decrease the probability
+ of the output spike generation).
+ Then we take this number of inputs and randomly distribute them in the
+ time window of size 
+\begin_inset Formula $dt$
+\end_inset
+
+ and observe the probability for the generation of a spike.
+ The Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:spike-generation_window"
+
+\end_inset
+
+presents the dependence of spike probability on the size of the time window
+ for 
+\begin_inset Formula $6$
+\end_inset
+
+ different values of input weights (and subsequently 
+\begin_inset Formula $4$
+\end_inset
+
+ different minimum simultaneous input values).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename networks/scripts/figures/time_window_effect.pdf
+	lyxscale 30
+	width 11cm
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+The dependence of spike generation on the size of the time window in which
+ the inputs come in for various input weights.
+ The fifth figure form the top represents the weight we use in the output
+ frequency tests presented in the previous figures.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:spike-generation_window"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can see that for our previous examples more or less any distribution
+ of the inputs in the 
+\begin_inset Formula $1ms$
+\end_inset
+
+ time window would elicit spike, for minimally 5 inputs.
+ We also see that when the input weights are strong and we only need a small
+ number of inputs to elicit a spike, the cut-off time window is larger and
+ less specific then with small weights and many inputs.
+\end_layout
+
+\begin_layout Standard
+We now look at how this cut-off time changes if we have more then the minimum
+ number of inputs.
+ The figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:prob_vs_nrinputs_window"
+
+\end_inset
+
+ presents this for the 4 different weight values.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename networks/scripts/figures/time_window_nr_of_inputs_effect_and_estimations_1.pdf
+	lyxscale 40
+	width 11.5cm
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Probabilities of the spike being elicited Vs.
+ a number of inputs shuffled in the time window for 4 different weight values.
+ The blue lines denote the 50% chance of the output spike generation.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:prob_vs_nrinputs_window"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Having the probabilities for output spike given a number of inputs in a
+ specific time window provides a tool for the extension of an estimation
+ of the output spikes given the inputs (Subsection: 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Estimating-the-effects-higher-corr"
+
+\end_inset
+
+).
+ As we see in the figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Estimating-the-output"
+
+\end_inset
+
+, the estimation method #2 is underestimating the output frequencies for
+ all the cases but Staude.
+ One of the reasons this could be the case is that this estimation method
+ does not take the temporal summation beyond the time-bin (
+\begin_inset Formula $1ms$
+\end_inset
+
+) into the account.
+ We can now do this, by not only checking if the number of the inputs in
+ the current time window is exceeding the threshold value , but also if
+ the total number of inputs in the past couple of time windows is exceeding
+ the threshold estimated by time-jittering experiment (blue line on figure
+ represents the threshold), which is now a function of time-window.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename correlations/examples/figures/method_comparison_estimation_2.pdf
+	lyxscale 40
+	width 11.5cm
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Introducing the new estimation method, based on the treshold funciton.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Estimating-the-output2"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Estimating-the-output2"
+
+\end_inset
+
+ shows the results of new estimation method compared with the past methods.
+ Even with manipulating the threshold function we are unable to properly
+ catch the output frequencies for the MIP and Detexhe methods.
+ If I am setting the threshold funciton higher, then I do not get any effects
+ of temporal summation (the estimation method #3 yields the same results
+ as the method #2).
+ If I set the threshold function at a lower value then I overestimate the
+ output frequencies of Ising and uncorrelated methods (see figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Estimating-the-output3"
+
+\end_inset
+
+).
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename correlations/examples/figures/method_comparison_estimation_3.pdf
+	lyxscale 40
+	width 11.5cm
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Overestimation for the case of lowered threshold function.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Estimating-the-output3"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To have a better idea of what is happening, we look at the exact timings
+ of the estimated and simulated spikes for a specific input train arrangements
+ (derived using different input generation methods).
+ They are presented in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Spike-timing-estimations"
+
+\end_inset
+
+:.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename correlations/examples/figures/spike_estimations_destexhe.pdf
+	lyxscale 20
+	width 6cm
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename correlations/examples/figures/spike_estimations_ising.pdf
+	lyxscale 20
+	width 6cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename correlations/examples/figures/spike_estimations_staude.pdf
+	lyxscale 20
+	width 6cm
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename correlations/examples/figures/spike_estimations_uncorrelated.pdf
+	lyxscale 20
+	width 6cm
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Spike timing estimations for input trains generated using different methods.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Spike-timing-estimations"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Morphologies
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename destexhe/figures/51-2a_axon.png
+	lyxscale 50
+	width 10cm
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+The Layer VI neuron used in the Ho & Destexhe paper, with manually added
+ axon (the straight line).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Single-compartment prototyping
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename networks/scripts/figures/simple_input_example.png
+	lyxscale 30
+	width 12cm
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Demonstrating the simple inputs - A spike produced by a sequence of excitatory
+ inputs at 200 ms followed by a single EPSP at 500 ms.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename networks/scripts/figures/simple_correlation_effect_n2_1.png
+	lyxscale 10
+	width 6cm
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename networks/scripts/figures/simple_correlation_effect_n2_10.png
+	lyxscale 10
+	width 6cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename networks/scripts/figures/simple_correlation_effect_n2_60.png
+	lyxscale 10
+	width 6cm
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Inputs and the outputs: The demonstration how the differently correlated
+ trains produce different output activity.
+ All the three cases have the same total number of inputs.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename networks/scripts/figures/correlation_effects.png
+	lyxscale 20
+	width 8cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename networks/scripts/figures/correlation_effects2.png
+	lyxscale 20
+	width 9cm
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+The effects of input correlation on the single-compartment model: (top)
+ Tuning the pairwise input train correlation using different number of uncorrela
+ted trains (seed traces) to generate the input trains.
+ (middle) We stimulate the neuron using 60 or 120 Poisson trains with the
+ frequency of 20Hz or 10 Hz in top and bottom figure respectively and observe
+ the numbers of spikes as a function of the number of seed traces.
+ (bottom) Same as middle, but as a function of pairwise correlation.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename prototyping/figures/spike_count_depends_on_weights.png
+	lyxscale 30
+	width 10cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Spike counts depend on synaptic weights.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename prototyping/figures/varying_stimulus_amplitude.png
+	lyxscale 30
+	width 6cm
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename prototyping/figures/varying_stimulus_amplitude2.png
+	lyxscale 30
+	width 6cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename prototyping/figures/varying_stimulus_amplitude3.png
+	lyxscale 70
+	width 6cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Different stimulus amplitudes can or can not elicit a spike in a neuron
+ with the background activity.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename prototyping/figures/variable_stimulus_spike_probability.png
+	lyxscale 50
+	width 10cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename prototyping/data/figures/variable_stimulus_spike_probability_2.png
+	lyxscale 50
+	width 10cm
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+(TOP) We look at the probability of a spike being elicited after you stimulate
+ the soma with a step current injection of various amplitudes.
+ The plot shows the probability vs.
+ the stimulus amplitude.
+ The blue dots denote the cases where we include the 
+\begin_inset Quotes eld
+\end_inset
+
+background correlated input
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The black dashed line denotes the spike initiation probability in the absence
+ of any background input.
+ (BOTTOM) Same, but excluding the trials which elicit 10ms before or 5 ms
+ after the stimulus onset for the stimulus amplitude 0 nA.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename prototyping/data/figures/variable_stimulus_spike_probability_over_n2_1.png
+	lyxscale 30
+	width 12cm
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Observing how different correlation magnitudes influence the spike probability
+ profiles.
+ In this case we are only excluding the input traces which produce the spike
+ in the 5ms time interval after the stimulus onset in the absence of actual
+ stimulus.
+ As the result the probability of stimulus eliciting a spike even for big
+ stimulus amplitudes in smaller then 1.
+ Spike was suppressed by a spike preceding the stimulation.
+ n2 corresponds to the number of seed spike trains used to generate the
+ correlated spike trains.
+ The pairwise correlation amounts to 
+\begin_inset Formula $(1/n2)$
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
